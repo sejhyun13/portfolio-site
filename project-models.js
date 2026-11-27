@@ -379,17 +379,21 @@ function phone(group, viewport, ctx) {
   const rig = new THREE.Group();
   group.add(rig);
 
-  const ivory = standard(0xfffaf1, 0.16, 0.28);
-  const darkInk = standard(0x282419, 0.26, 0.32);
-  const gold = standard(0xffbb10, 0.14, 0.26);
+  const shell = standard(0x2c2823, 0.28, 0.30);
+  const champagne = standard(0xf4df9f, 0.24, 0.28);
+  const cardBody = standard(0xf5e5b8, 0.14, 0.30);
+  const darkInk = standard(0x1f1c18, 0.26, 0.32);
+  const gold = standard(0xffb703, 0.22, 0.24);
+  const warmAmber = standard(0xe68a00, 0.24, 0.26);
 
-  // 중앙 단일 3D 히어로 스마트폰 (기존 phone 아이덴티티 계승)
+  // 중앙 단일 3D 히어로 스마트폰 (밝은 크림 배경에서 선명하게 대비되는 다크 티타늄 프레임)
   const device = new THREE.Group();
   device.rotation.set(-0.12, -0.26, -0.13);
   device.scale.setScalar(0.94);
   rig.add(device);
 
-  mesh(device, roundedSlab(1.88, 3.62, 0.24, 0.24, 0.068), ivory);
+  mesh(device, roundedSlab(1.88, 3.62, 0.24, 0.24, 0.068), shell);
+  mesh(device, roundedSlab(1.91, 3.65, 0.04, 0.25, 0.015), champagne, 0, 0, -0.05);
   mesh(device, roundedSlab(1.78, 3.48, 0.035, 0.20, 0.018), darkInk, 0, 0, 0.175);
   const homeScreen = ctx.screen('./assets/modera-screen-home.jpg', 1.66, 3.36, { fallbackColor: 0xfff8e7 });
   mesh(device, roundedPlane(1.66, 3.36, 0.16), homeScreen, 0, 0, 0.214);
@@ -403,8 +407,8 @@ function phone(group, viewport, ctx) {
     card.rotation.set(rx, ry, rz);
     parent.add(card);
 
-    mesh(card, roundedSlab(width + 0.10, height + 0.10, 0.075, 0.13, 0.024), ivory);
-    mesh(card, roundedSlab(width * 0.42, 0.042, 0.028, 0.02, 0.006), standard(accentColor, 0.12, 0.26), 0, height / 2 + 0.02, 0.05);
+    mesh(card, roundedSlab(width + 0.10, height + 0.10, 0.075, 0.13, 0.024), cardBody);
+    mesh(card, roundedSlab(width * 0.42, 0.042, 0.028, 0.02, 0.006), standard(accentColor, 0.16, 0.26), 0, height / 2 + 0.02, 0.05);
     const mat = ctx.screen(url, width, height, { fallbackColor: 0xfffdf7, alignY: 1 });
     mesh(card, roundedPlane(width, height, 0.09), mat, 0, 0, 0.064);
     return card;
@@ -416,7 +420,7 @@ function phone(group, viewport, ctx) {
     url: './assets/modera-screen-analysis.jpg',
     x: -1.48, y: 0.56, z: 0.42,
     rx: 0.05, ry: 0.24, rz: 0.07,
-    accentColor: 0xffbb10,
+    accentColor: 0xffb703,
   });
 
   // 우하단 부유 카드: 분석·요약 문서 상세 (Claude 설치 방법 2가지)
@@ -425,20 +429,20 @@ function phone(group, viewport, ctx) {
     url: './assets/modera-screen-doc.jpg',
     x: 1.44, y: -0.60, z: 0.58,
     rx: -0.06, ry: -0.26, rz: -0.06,
-    accentColor: 0xe39e0b,
+    accentColor: 0xe68a00,
   });
 
   // 골드 궤도 링 + 3D AI 스파클 별 클러스터 (기존 phone 시그니처 계승)
-  const ring = orbit(group, 2.24, 0xd8960c, 1.24, -0.22);
+  const ring = orbit(group, 2.24, 0xe59600, 1.24, -0.22);
   ring.position.set(0, -0.22, -0.08);
   const spark = new THREE.Group();
   spark.position.set(1.36, 1.26, 0.68);
   spark.rotation.z = 0.28;
   group.add(spark);
   const stars = [
-    [0, 0, 0.29, ivory],
-    [0.44, 0.36, 0.13, gold],
-    [-0.14, -0.44, 0.11, ivory],
+    [0, 0, 0.29, gold],
+    [0.44, 0.36, 0.13, warmAmber],
+    [-0.14, -0.44, 0.11, gold],
   ].map(([x, y, size, mat]) => {
     const point = mesh(spark, new THREE.OctahedronGeometry(size), mat, x, y);
     point.scale.set(0.64, 1.36, 0.84);
