@@ -246,27 +246,6 @@ const observer = new IntersectionObserver((entries) => {
 
 art.forEach((viewport) => observer.observe(viewport));
 
-document.querySelectorAll('[data-tilt-stage]').forEach((stage) => {
-  const tilt = stage.querySelector('.stage-tilt');
-  if (!tilt) return;
-  const reset = () => {
-    stage.removeAttribute('data-tilting');
-    tilt.style.removeProperty('--rx');
-    tilt.style.removeProperty('--ry');
-  };
-  stage.addEventListener('pointermove', (event) => {
-    if (reducedMotion.matches || event.pointerType === 'touch') return;
-    const rect = stage.getBoundingClientRect();
-    const nx = ((event.clientX - rect.left) / rect.width - 0.5) * 2;
-    const ny = ((event.clientY - rect.top) / rect.height - 0.5) * 2;
-    stage.setAttribute('data-tilting', '');
-    tilt.style.setProperty('--rx', `${(6 - ny * 7).toFixed(2)}deg`);
-    tilt.style.setProperty('--ry', `${(-12 + nx * 9).toFixed(2)}deg`);
-  });
-  stage.addEventListener('pointerleave', reset);
-  stage.addEventListener('pointercancel', reset);
-});
-
 document.querySelector('[data-print-page]')?.addEventListener('click', () => {
   window.print();
 });
