@@ -198,7 +198,28 @@ sectionIndex.addEventListener('click', (event) => {
   if (!entry || entry.profileIndex < 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
   event.preventDefault();
   selectProfile(entry.profileIndex);
-  profileDetails.scrollIntoView({ block: 'start' });
+  profileDetails.scrollIntoView({ behavior: reducedMotion.matches ? 'auto' : 'smooth', block: 'start' });
+  if (location.hash) history.replaceState(null, '', `${location.pathname}${location.search}`);
+});
+
+// 내부 섹션 링크 클릭 시 URL에 #해시를 붙이지 않고 해당 위치로 이동합니다.
+document.addEventListener('click', (event) => {
+  if (event.defaultPrevented || event.button !== 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+  const link = event.target.closest('a[href^="#"]');
+  if (!link) return;
+  const id = link.getAttribute('href').slice(1);
+  if (!id) return;
+  const target = document.getElementById(id);
+  if (!target) return;
+  event.preventDefault();
+  target.scrollIntoView({ behavior: reducedMotion.matches ? 'auto' : 'smooth', block: 'start' });
+  if (link.classList.contains('skip-link')) {
+    if (!target.hasAttribute('tabindex')) target.setAttribute('tabindex', '-1');
+    target.focus({ preventScroll: true });
+  }
+  if (location.hash) {
+    history.replaceState(null, '', `${location.pathname}${location.search}`);
+  }
 });
 
 window.addEventListener('scroll', scheduleSectionIndex, { passive: true });
