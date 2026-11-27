@@ -596,8 +596,27 @@
           </dl>
         </div>
         <figure class="ai-figure">
-          <img src="./assets/ai-workflow.jpg" alt="사람의 통제 기준 아래 AI 에이전트가 측정, 구현, 빌드, 검증을 반복하는 멀티 에이전트 협업 구조 일러스트"
-            width="1200" height="896">
+          <div class="art-viewport ai-network-viewport" data-model="network" role="img"
+            aria-label="사람 통제 기준(CLAUDE.md)을 중심으로 Claude Code, Codex, MCP·Cowork, 실측·검증 노드가 3차원으로 연결된 멀티 에이전트 협업 다이어그램">
+            <svg class="art-fallback ai-network-fallback" viewBox="0 0 480 360" aria-hidden="true">
+              <ellipse cx="240" cy="242" rx="164" ry="62" fill="none" stroke="#cbd5e1" stroke-width="1.4" stroke-dasharray="4 4" />
+              <path d="M 110 120 Q 175 110 240 176 M 370 116 Q 305 112 240 176 M 132 246 Q 186 226 240 176 M 348 242 Q 294 224 240 176" fill="none" stroke="#6366f1" stroke-width="2" />
+              <path d="M 110 120 Q 240 60 370 116 Q 408 180 348 242 Q 240 296 132 246 Q 74 182 110 120 Z" fill="none" stroke="#cbd5e1" stroke-width="1.4" />
+              <polygon points="240,144 268,176 240,208 212,176" fill="#2450db" />
+              <circle cx="240" cy="176" r="36" fill="none" stroke="#e0a419" stroke-width="2.4" />
+              <rect x="88" y="102" width="44" height="36" rx="8" fill="#d97757" />
+              <polygon points="370,94 392,107 392,131 370,144 348,131 348,107" fill="#1e293b" />
+              <circle cx="132" cy="246" r="20" fill="#7c3aed" />
+              <rect x="326" y="226" width="44" height="32" rx="7" fill="#0f766e" />
+            </svg>
+            <div class="net-labels" aria-hidden="true">
+              <span class="net-label net-label-hub" data-net-node="hub" style="left:50%;top:36%"><strong>사람 통제</strong><small>CLAUDE.md · 기준</small></span>
+              <span class="net-label" data-net-node="claude" style="left:21%;top:22%"><strong>Claude Code</strong><small>/goal · 구현</small></span>
+              <span class="net-label" data-net-node="codex" style="left:79%;top:22%"><strong>Codex</strong><small>설계 · 리뷰 · 인계</small></span>
+              <span class="net-label" data-net-node="mcp" style="left:22%;top:80%"><strong>MCP · Cowork</strong><small>Notion · Jira</small></span>
+              <span class="net-label" data-net-node="verify" style="left:78%;top:79%"><strong>실측 · 검증</strong><small>동일성 · 로그</small></span>
+            </div>
+          </div>
           <figcaption>사람(제약·합격 기준·비용 판단) ↔ AI 에이전트(측정·구현·빌드·검증)</figcaption>
         </figure>
       </div>

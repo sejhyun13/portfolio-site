@@ -166,7 +166,15 @@ a:focus-visible, button:focus-visible { outline: 2px solid currentColor; outline
 .ai-stats strong { display: block; font-size: clamp(1.15rem, 1.9vw, 1.45rem); font-weight: 850; line-height: 1.2; letter-spacing: -.025em; font-variant-numeric: tabular-nums; }
 .ai-stats span { display: block; margin-top: 3px; font-size: .8125rem; color: var(--muted); line-height: 1.4; }
 .ai-figure { padding: 12px; border-radius: 18px; background: #f3f5f9; color: #17202a; }
-.ai-figure img { display: block; width: 100%; height: auto; aspect-ratio: 4 / 3; object-fit: cover; border-radius: 12px; background: #e9edf4; }
+.ai-network-viewport { position: relative; aspect-ratio: 4 / 3; border-radius: 12px; border: 1px solid #e1e7f2; background: radial-gradient(circle at 50% 44%, #ffffff 0%, #eef2f9 100%); overflow: hidden; }
+.ai-network-viewport canvas { filter: drop-shadow(0 12px 18px #1e293b18); }
+.ai-network-fallback { width: 100%; height: 100%; display: block; }
+.net-labels { position: absolute; inset: 0; pointer-events: none; z-index: 2; }
+.net-label { position: absolute; transform: translate(-50%, -50%); display: grid; gap: 1px; padding: 5px 9px; border: 1px solid #d5dfef; border-radius: 8px; background: #ffffffeb; color: #151515; text-align: center; white-space: nowrap; box-shadow: 0 3px 10px #0f172a12; }
+.net-label strong { font-size: .78rem; font-weight: 820; line-height: 1.2; }
+.net-label small { font-size: .68rem; font-weight: 620; color: #475569; line-height: 1.2; }
+.net-label-hub { border-color: #2450db; background: #2450db; color: #fff; }
+.net-label-hub small { color: #dbeafe; }
 .ai-figure figcaption { margin-top: 10px; padding-inline: 4px; color: #4b5562; font-size: .84rem; font-weight: 640; text-align: center; }
 
 .ai-cases { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: clamp(14px, 2.5vw, 24px); margin-top: clamp(24px, 3.5vw, 38px); }
@@ -515,6 +523,12 @@ a:focus-visible, button:focus-visible { outline: 2px solid currentColor; outline
   .ai-stats strong { font-size: 11pt; }
   .ai-stats span { font-size: 7.2pt; }
   .ai-figure { padding: 8px; border: 1px solid #d8d8d8; background: #fafafa !important; }
+  .ai-network-viewport { background: #fff !important; border-color: #d8d8d8; }
+  .ai-network-viewport canvas { display: none !important; }
+  .ai-network-viewport.has-model .art-fallback { visibility: visible !important; }
+  .net-label { padding: 3px 6px; box-shadow: none; }
+  .net-label strong { font-size: 7pt; }
+  .net-label small { font-size: 6.2pt; }
   .ai-figure figcaption { margin-top: 6px; font-size: 7.5pt; }
   .ai-cases { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin-top: 14px; break-inside: avoid; }
   .ai-cases article { padding-top: 8px; }
