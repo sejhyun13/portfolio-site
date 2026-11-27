@@ -233,11 +233,9 @@ a:focus-visible, button:focus-visible { outline: 2px solid currentColor; outline
 .project-heading { grid-area: heading; align-self: end; }
 .project-icon { display: block; width: clamp(66px, 7vw, 96px); height: auto; aspect-ratio: 1; object-fit: contain; margin-bottom: clamp(17px, 2.3vw, 30px); border-radius: clamp(14px, 1.8vw, 22px); box-shadow: 0 2px 4px #14102524, 0 9px 18px #14102538; outline: 1px solid #ffffff64; outline-offset: -1px; }
 .dva .project-icon { padding: 9px; background: #f0f6ff; }
-.project-wordmark-heading { margin: 0; line-height: 0; }
-.project-wordmark { display: block; width: clamp(205px, 27vw, 350px); max-width: 100%; height: auto; filter: drop-shadow(0 10px 24px #ff2e8430); }
+.motif .project-icon { padding: 9px; background: #fff3f8; }
 .project-copy { grid-area: copy; align-self: start; }
 .project h2 { font-size: clamp(52px, 8.6vw, 116px); line-height: .98; font-weight: 900; letter-spacing: -.04em; }
-.project h2.project-wordmark-heading { font-size: 0; line-height: 0; }
 :root[data-scene-violet] .motif h2 { color: var(--accent); }
 .project-subtitle { margin-top: 18px; font-size: clamp(23px, 3vw, 36px); line-height: 1.2; font-weight: 800; letter-spacing: -.035em; }
 .project-description { max-width: 44ch; color: var(--muted); font-size: clamp(16px, 1.45vw, 18px); line-height: 1.65; }
@@ -546,9 +544,7 @@ a:focus-visible, button:focus-visible { outline: 2px solid currentColor; outline
   .modera { --case-mark: #6b4c14 !important; }
   .project-layout { grid-template: "heading" "copy" / 1fr; gap: 10px; }
   .project-icon { width: 38px; margin-bottom: 8px; box-shadow: none; border: 1px solid #d8d8d8; }
-  .project-wordmark { width: 132px; filter: none; }
   .project h2 { font-size: 24pt; color: #111 !important; }
-  .project h2.project-wordmark-heading { font-size: 0; }
   .project-subtitle { margin-top: 4px; font-size: 13pt; }
   .project-subtitle br { display: none; }
   .project-description { max-width: none; font-size: 9.5pt; line-height: 1.5; }
