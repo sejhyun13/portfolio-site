@@ -371,114 +371,85 @@ function wave(group, viewport, ctx) {
 }
 
 /* ============================================================================
- * 2. MOTIF (layers): 매트 갤럭시 S 울트라 3겹 영상 레이어 + 뷰파인더 + 타임라인
+ * 2. MOTIF (layers): 매트 갤럭시 S 울트라 3단 부채꼴 전개 (홈 · 챌린지 중앙 · 모티프)
  * ============================================================================ */
 function layers(group, viewport, ctx) {
   const rig = new THREE.Group();
-  rig.rotation.set(-0.13, -0.31, -0.06);
+  rig.rotation.set(0.06, -0.06, 0);
   group.add(rig);
 
-  const obsidian = matte(0x1f1b28, 0.94);
-  const slateRail = matte(0x474157, 0.90);
   const pinkMat = matte(0xff3d88, 0.88);
   const blushMat = matte(0xffb5d4, 0.90);
-  const whiteMat = matte(0xffffff, 0.90);
 
-  function addFilmLayer(parent, { width, height, depth, url, rimColor, sprockets = false }) {
-    const plate = new THREE.Group();
-    parent.add(plate);
-    const r = 0.075;
-    mesh(plate, roundedSlab(width + 0.09, height + 0.09, depth, r, 0.015), obsidian);
-    if (rimColor) {
-      mesh(plate, roundedSlab(width + 0.13, height + 0.13, 0.018, r + 0.01, 0.006), matte(rimColor, 0.90), 0, 0, -depth * 0.42);
-    }
-    const screenMat = ctx.screen(url, width, height, { fallbackColor: 0x261f33 });
-    mesh(plate, roundedPlane(width, height, r * 0.72), screenMat, 0, 0, depth / 2 + 0.026);
-
-    // 좌측 필름 스트립 퍼포레이션(영상 프레임 레이어 디테일)
-    if (sprockets) {
-      const holeMat = matte(0x3a324d, 0.95);
-      for (let i = -3; i <= 3; i++) {
-        mesh(plate, roundedSlab(0.048, 0.09, 0.02, 0.012, 0.002), holeMat, -width / 2 - 0.01, i * 0.30, depth / 2 + 0.018);
-      }
-    }
-    return plate;
-  }
-
-  // Layer 1 (뒤): SVOR 배경 복원 필름 플레이트 (좌측 퍼포레이션 디테일)
-  const back = addFilmLayer(rig, {
-    width: 1.38, height: 2.42, depth: 0.09,
-    url: './assets/motif-screen-ready.jpg',
-    sprockets: true,
+  // 좌측 뒤: MOTIF 홈 화면 (HOT · Who's On · 하단 네비게이션)
+  const leftWing = new THREE.Group();
+  rig.add(leftWing);
+  buildGalaxyPhone(leftWing, {
+    width: 1.38,
+    height: 2.94,
+    depth: 0.13,
+    bodyColor: 0x1c1824,
+    railColor: 0x4b445e,
+    bezelColor: 0x110f17,
+    screenUrl: './assets/motif-ui-home.jpg',
+    fallbackColor: 0x191720,
+    ctx,
   });
 
-  // Layer 2 (중간): SAM 2.1 인물 슬롯 마스크 + 3D 뷰파인더 브래킷 + REC 배지
-  const middle = addFilmLayer(rig, {
-    width: 1.44, height: 2.52, depth: 0.10,
-    url: './assets/motif-screen-select.jpg',
-    rimColor: 0xff3d88,
+  // 우측 뒤: MOTIF 모티프 상세 화면 (아티스트 패스 · Moment with KARINA)
+  const rightWing = new THREE.Group();
+  rig.add(rightWing);
+  buildGalaxyPhone(rightWing, {
+    width: 1.38,
+    height: 2.94,
+    depth: 0.13,
+    bodyColor: 0x1c1824,
+    railColor: 0x4b445e,
+    bezelColor: 0x110f17,
+    screenUrl: './assets/motif-ui-motif.jpg',
+    fallbackColor: 0x191720,
+    ctx,
   });
 
+  // 중앙 전면 히어로: MOTIF 챌린지 슬롯 선택 화면 (삼성 갤럭시 S 울트라 + 뷰파인더 브래킷)
+  const centerHero = new THREE.Group();
+  rig.add(centerHero);
+  buildGalaxyPhone(centerHero, {
+    width: 1.56,
+    height: 3.30,
+    depth: 0.16,
+    bodyColor: 0x191521,
+    railColor: 0x574e6e,
+    bezelColor: 0x100e16,
+    screenUrl: './assets/motif-ui-challenge.jpg',
+    fallbackColor: 0x241d31,
+    ctx,
+  });
+  // 중앙 히어로 후면 핫핑크 매트 언더림
+  mesh(centerHero, roundedSlab(1.61, 3.35, 0.016, 0.075, 0.006), pinkMat, 0, 0, -0.078);
+
+  // 중앙 챌린지 폰 바깥 4모서리 3D 매트 뷰파인더 브래킷 (UI 텍스트를 가리지 않게 바깥쪽 배치)
   const brackets = new THREE.Group();
-  middle.add(brackets);
+  centerHero.add(brackets);
   const hBar = roundedSlab(0.24, 0.032, 0.024, 0.008, 0.004);
   const vBar = roundedSlab(0.032, 0.24, 0.024, 0.008, 0.004);
   for (const sx of [-1, 1]) {
     for (const sy of [-1, 1]) {
       const corner = new THREE.Group();
       corner.userData = { sx, sy };
-      mesh(corner, hBar, blushMat, sx * 0.57, sy * 1.15, 0.15);
-      mesh(corner, vBar, blushMat, sx * 0.68, sy * 1.04, 0.15);
+      mesh(corner, hBar, blushMat, sx * 0.74, sy * 1.72, 0.14);
+      mesh(corner, vBar, blushMat, sx * 0.85, sy * 1.61, 0.14);
       brackets.add(corner);
     }
   }
-  // 좌상단 매트 REC 인디케이터 점
-  const recDot = new THREE.CylinderGeometry(0.036, 0.036, 0.016, 18);
-  recDot.rotateX(Math.PI / 2);
-  mesh(middle, recDot, pinkMat, -0.52, 1.06, 0.15);
 
-  // Layer 3 (앞): 실제 삼성 갤럭시 S 울트라 (각진 프레임 + 펀치홀 + 물리 버튼 + 타임라인 스크러버)
-  const front = new THREE.Group();
-  rig.add(front);
-  buildGalaxyPhone(front, {
-    width: 1.62,
-    height: 2.74,
-    depth: 0.16,
-    bodyColor: 0x1a1722,
-    railColor: 0x4b445e,
-    bezelColor: 0x110f17,
-    screenUrl: './assets/motif-screen-challenge.jpg',
-    fallbackColor: 0x241d31,
-    ctx,
-  });
-  // 갤럭시 측면 핫핑크 액센트 언더글로우 림
-  mesh(front, roundedSlab(1.66, 2.78, 0.016, 0.075, 0.006), pinkMat, 0, 0, -0.075);
+  // 매트 핫핑크 궤도 링 + 매트 구체 (상단 안내 문구를 가리지 않도록 하단부로 궤도 배치)
+  const ring = orbit(group, 2.48, 0xf2649f, 1.24, -0.14);
+  ring.position.set(0, -0.38, -0.22);
+  const orb1 = mesh(group, new THREE.SphereGeometry(0.085, 22, 14), blushMat, 2.18, 1.38, 0.44);
+  const orb2 = mesh(group, new THREE.SphereGeometry(0.070, 20, 12), pinkMat, -2.16, -1.24, -0.26);
 
-  // 하단 플로팅 매트 타임라인 스크러버 바 + 플레이 배지
-  const timeline = new THREE.Group();
-  timeline.position.set(0, -1.06, 0.19);
-  front.add(timeline);
-  mesh(timeline, roundedSlab(1.36, 0.24, 0.04, 0.08, 0.008), matte(0x1b1726, 0.94));
-  // 플레이 버튼
-  const playDisc = new THREE.CylinderGeometry(0.09, 0.09, 0.032, 24);
-  playDisc.rotateX(Math.PI / 2);
-  mesh(timeline, playDisc, pinkMat, -0.50, 0, 0.025);
-  const tri = new THREE.Shape();
-  tri.moveTo(-0.026, -0.036);
-  tri.lineTo(0.044, 0);
-  tri.lineTo(-0.026, 0.036);
-  tri.closePath();
-  mesh(timeline, new THREE.ExtrudeGeometry(tri, { depth: 0.014, bevelEnabled: false }), whiteMat, -0.50, 0, 0.042);
-  // 타임라인 트랙 + 움직이는 매트 플레이헤드
-  mesh(timeline, roundedSlab(0.88, 0.032, 0.014, 0.014, 0.002), matte(0x453d59, 0.95), 0.12, 0, 0.024);
-  const playhead = mesh(timeline, roundedSlab(0.052, 0.11, 0.026, 0.018, 0.004), blushMat, -0.10, 0, 0.034);
-
-  // 매트 핫핑크 궤도 링 + 매트 구체
-  const ring = orbit(group, 2.38, 0xf2649f, 0.84, -0.26);
-  const orb1 = mesh(group, new THREE.SphereGeometry(0.085, 22, 14), blushMat, 2.02, 1.32, 0.50);
-  const orb2 = mesh(group, new THREE.SphereGeometry(0.070, 20, 12), pinkMat, -2.06, -1.16, -0.32);
-
-  const pointer = attachPointerTilt(viewport, 0.12, 0.17);
+  const pointer = attachPointerTilt(viewport, 0.11, 0.17);
 
   function update(progress, elapsedMs = 0) {
     const t = elapsedMs / 1000;
@@ -487,31 +458,29 @@ function layers(group, viewport, ctx) {
     pointer.hover += (pointer.targetHover - pointer.hover) * 0.08;
 
     const breathe = 0.5 + 0.5 * Math.sin(t * 1.1);
-    const spread = 0.34 * breathe + 0.52 * pointer.hover;
+    const fan = 0.30 * breathe + 0.55 * pointer.hover;
 
-    back.position.set(-1.08 - 0.26 * spread, -0.22 - 0.09 * spread, -0.78 - 0.32 * spread);
-    back.rotation.y = 0.10 + 0.04 * spread;
+    leftWing.position.set(-1.34 - 0.18 * fan, -0.08 - 0.04 * fan, -0.34 - 0.14 * fan);
+    leftWing.rotation.set(-0.04, 0.30 + 0.06 * fan, 0.055 + 0.02 * fan);
 
-    middle.position.set(-0.04, 0.02, -0.02);
+    centerHero.position.set(0, 0.04 + 0.04 * breathe, 0.50 + 0.12 * pointer.hover);
+    centerHero.rotation.set(-0.03, -0.05 + Math.sin(t * 0.5) * 0.04, 0);
 
-    front.position.set(1.04 + 0.22 * spread, 0.18 + 0.08 * spread, 0.72 + 0.30 * spread);
-    front.rotation.y = -0.08 - 0.04 * spread;
+    rightWing.position.set(1.34 + 0.18 * fan, -0.06 - 0.04 * fan, -0.34 - 0.14 * fan);
+    rightWing.rotation.set(-0.04, -0.30 - 0.06 * fan, -0.055 - 0.02 * fan);
 
     for (const corner of brackets.children) {
       const { sx, sy } = corner.userData;
-      corner.position.set(sx * 0.055 * spread, sy * 0.055 * spread, 0.07 * spread);
+      corner.position.set(sx * 0.055 * fan, sy * 0.055 * fan, 0.06 * fan);
     }
 
-    // 타임라인 플레이헤드가 트랙 위를 부드럽게 왕복합니다.
-    playhead.position.x = -0.26 + 0.72 * (0.5 + 0.5 * Math.sin(t * 0.9));
-
-    rig.rotation.x = -0.13 + Math.sin(t * 0.58) * 0.025 + pointer.x;
-    rig.rotation.y = -0.31 + Math.sin(t * 0.44) * 0.05 + pointer.y;
-    rig.position.y = Math.sin(t * 0.85) * 0.045;
+    rig.rotation.x = 0.06 + Math.sin(t * 0.55) * 0.02 + pointer.x;
+    rig.rotation.y = -0.06 + Math.sin(t * 0.42) * 0.045 + pointer.y;
+    rig.position.y = Math.sin(t * 0.85) * 0.04;
 
     ring.rotation.z = -t * 0.12;
-    orb1.position.y = 1.32 + Math.sin(t * 1.35) * 0.08;
-    orb2.position.y = -1.16 + Math.cos(t * 1.15) * 0.07;
+    orb1.position.y = 1.38 + Math.sin(t * 1.35) * 0.08;
+    orb2.position.y = -1.24 + Math.cos(t * 1.15) * 0.07;
   }
 
   update.continuous = true;
