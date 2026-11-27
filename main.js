@@ -1,19 +1,28 @@
-const about = document.querySelector('#about');
+const introSections = [
+  document.querySelector('#about'),
+  document.querySelector('#stack'),
+  document.querySelector('#ai-workflow'),
+].filter(Boolean);
 const navLinks = [...document.querySelectorAll('[data-nav]')];
 const header = document.querySelector('.site-header');
 let navObserver;
 
 function observeNav() {
   navObserver?.disconnect();
+  const visible = new Set();
   // 고정 헤더 아래에서 화면의 위쪽 절반을 기준으로 현재 메뉴를 표시합니다.
-  navObserver = new IntersectionObserver(([entry]) => {
-    const current = entry.isIntersecting ? '#about' : '#projects';
+  navObserver = new IntersectionObserver((entries) => {
+    for (const { target, isIntersecting } of entries) {
+      if (isIntersecting) visible.add(target);
+      else visible.delete(target);
+    }
+    const current = visible.size ? '#about' : '#projects';
     for (const link of navLinks) {
       if (link.hash === current) link.setAttribute('aria-current', 'location');
       else link.removeAttribute('aria-current');
     }
   }, { rootMargin: `-${header.offsetHeight + 1}px 0px -${Math.round(innerHeight * .44)}px 0px` });
-  navObserver.observe(about);
+  introSections.forEach((sec) => navObserver.observe(sec));
 }
 new ResizeObserver(observeNav).observe(header);
 window.addEventListener('resize', observeNav);
@@ -125,94 +134,54 @@ new ResizeObserver(measureTheme).observe(document.body);
 measureTheme();
 syncTheme();
 
-const profileViewport = document.querySelector('.profile-viewport');
-const profileControls = [...document.querySelectorAll('.profile-controls a')];
-const profilePanels = [...profileViewport.children];
-let profileFrame = 0;
+const profileDetails = document.querySelector('.profile-details');
+const profileTabs = [...document.querySelectorAll('.profile-controls [role="tab"]')];
+const profilePanels = profileTabs.map((tab) => document.getElementById(tab.getAttribute('aria-controls')));
+let activeProfile = 0;
 
-function activeProfileIndex() {
-  return Math.max(0, Math.min(profilePanels.length - 1,
-    Math.round(profileViewport.scrollLeft / profileViewport.clientWidth)));
-}
-
-function updateProfile() {
-  const index = activeProfileIndex();
-  profileControls.forEach((control, candidate) => {
-    if (candidate === index) control.setAttribute('aria-current', 'true');
-    else control.removeAttribute('aria-current');
+function selectProfile(index, { focus = false } = {}) {
+  activeProfile = Math.max(0, Math.min(profileTabs.length - 1, index));
+  profileTabs.forEach((tab, i) => {
+    const selected = i === activeProfile;
+    tab.setAttribute('aria-selected', String(selected));
+    tab.tabIndex = selected ? 0 : -1;
+    profilePanels[i].hidden = !selected;
+    profilePanels[i].inert = !selected;
   });
+  if (focus) profileTabs[activeProfile].focus();
+  scheduleSectionIndex();
 }
+profilePanels.forEach((panel, i) => { panel.inert = i !== 0; });
 
-function stopProfileScroll() {
-  cancelAnimationFrame(profileFrame);
-  profileFrame = 0;
-  profileViewport.classList.remove('is-sliding');
-}
-
-function goToProfile(index) {
-  cancelAnimationFrame(profileFrame);
-  const from = profileViewport.scrollLeft;
-  const target = index * profileViewport.clientWidth;
-  if (reducedMotion.matches || from === target) {
-    profileViewport.scrollLeft = target;
-    stopProfileScroll();
-    return;
-  }
-
-  // 거리와 무관하게 빠르게 이동하고 직접 밀기 시작하면 브라우저의 스냅으로 돌아갑니다.
-  profileViewport.classList.add('is-sliding');
-  const start = performance.now();
-  function slide(now) {
-    const progress = reducedMotion.matches ? 1 : Math.min((now - start) / 320, 1);
-    const eased = 1 - (1 - progress) ** 3;
-    profileViewport.scrollLeft = from + (index * profileViewport.clientWidth - from) * eased;
-    if (progress < 1) profileFrame = requestAnimationFrame(slide);
-    else stopProfileScroll();
-  }
-  profileFrame = requestAnimationFrame(slide);
-}
-
-profileControls.forEach((control, index) => {
-  control.addEventListener('click', (event) => {
-    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
-    event.preventDefault();
-    goToProfile(index);
-  });
+profileTabs.forEach((tab, index) => {
+  tab.addEventListener('click', () => selectProfile(index));
 });
 
-profileViewport.closest('.profile-details').addEventListener('keydown', (event) => {
-  if (!['ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key)) return;
-  const current = profileControls.includes(event.target) ? profileControls.indexOf(event.target) : activeProfileIndex();
-  const target = event.key === 'Home' ? 0 : event.key === 'End' ? profilePanels.length - 1
-    : Math.max(0, Math.min(profilePanels.length - 1, current + (event.key === 'ArrowLeft' ? -1 : 1)));
+document.querySelector('.profile-controls')?.addEventListener('keydown', (event) => {
+  const keys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
+  if (!keys.includes(event.key)) return;
   event.preventDefault();
-  if (event.target !== profileViewport) profileControls[target].focus({ preventScroll: true });
-  goToProfile(target);
+  let next = activeProfile;
+  if (event.key === 'Home') next = 0;
+  else if (event.key === 'End') next = profileTabs.length - 1;
+  else if (event.key === 'ArrowUp' || event.key === 'ArrowLeft') next = (activeProfile - 1 + profileTabs.length) % profileTabs.length;
+  else next = (activeProfile + 1) % profileTabs.length;
+  selectProfile(next, { focus: true });
 });
 
-profileViewport.addEventListener('scroll', updateProfile, { passive: true });
-profileViewport.addEventListener('pointerdown', stopProfileScroll);
-profileViewport.addEventListener('wheel', stopProfileScroll, { passive: true });
-new ResizeObserver(updateProfile).observe(profileViewport);
-profileViewport.setAttribute('data-ready', '');
-updateProfile();
-
-const profileDetails = profileViewport.closest('.profile-details');
 const sectionIndex = document.querySelector('.section-index');
 const sectionEntries = [...sectionIndex.querySelectorAll('a')].map((link) => {
-  const profileIndex = profileControls.findIndex((control) => control.hash === link.hash);
+  const profileIndex = profileTabs.findIndex((tab) => tab.dataset.profileTarget === link.hash);
   return { link, profileIndex, target: profileIndex < 0 ? document.querySelector(link.hash) : profileDetails };
 });
 let sectionIndexFrame = 0;
 
 function updateSectionIndex() {
   sectionIndexFrame = 0;
-  const activeProfile = activeProfileIndex();
   const readingLine = header.offsetHeight + 56;
   const atBottom = Math.ceil(scrollY + innerHeight) >= root.scrollHeight - 2;
-  // 소개의 하위 항목들은 같은 높이에 있어 현재 보이는 가로 패널만 판단에 포함합니다.
   const current = atBottom ? sectionEntries.at(-1) : sectionEntries.findLast(({ target, profileIndex }) =>
-    (profileIndex < 0 || profileIndex === activeProfile) && target.getBoundingClientRect().top <= readingLine
+    (profileIndex < 0 || profileIndex === activeProfile) && target && target.getBoundingClientRect().top <= readingLine
   ) ?? sectionEntries[0];
   for (const { link } of sectionEntries) {
     if (link === current.link) link.setAttribute('aria-current', 'location');
@@ -228,11 +197,11 @@ sectionIndex.addEventListener('click', (event) => {
   const entry = sectionEntries.find(({ link }) => link === event.target.closest('a'));
   if (!entry || entry.profileIndex < 0 || event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
   event.preventDefault();
-  goToProfile(entry.profileIndex);
+  selectProfile(entry.profileIndex);
   profileDetails.scrollIntoView({ block: 'start' });
 });
+
 window.addEventListener('scroll', scheduleSectionIndex, { passive: true });
-profileViewport.addEventListener('scroll', scheduleSectionIndex, { passive: true });
 new ResizeObserver(scheduleSectionIndex).observe(document.body);
 updateSectionIndex();
 
@@ -280,3 +249,19 @@ art.forEach((viewport) => observer.observe(viewport));
 document.querySelector('[data-print-page]')?.addEventListener('click', () => {
   window.print();
 });
+
+const stackDetail = document.querySelector('[data-stack-detail]');
+if (stackDetail) {
+  const defaultTip = stackDetail.textContent;
+  const showTip = (chip) => {
+    const tip = chip?.dataset.tip;
+    stackDetail.textContent = tip ?? defaultTip;
+    stackDetail.classList.toggle('is-active', Boolean(tip));
+  };
+  document.querySelectorAll('.stack-items li[data-tip]').forEach((chip) => {
+    chip.addEventListener('mouseenter', () => showTip(chip));
+    chip.addEventListener('focus', () => showTip(chip));
+    chip.addEventListener('click', () => showTip(chip));
+  });
+  document.querySelector('.profile-stack')?.addEventListener('mouseleave', () => showTip(null));
+}
