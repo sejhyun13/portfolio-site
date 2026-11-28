@@ -129,13 +129,14 @@ window.addEventListener('pageshow', () => {
   measureTheme();
   syncTheme();
 });
-reducedMotion.addEventListener('change', syncTheme);
+reducedMotion.addEventListener?.('change', syncTheme);
 new ResizeObserver(measureTheme).observe(document.body);
 measureTheme();
 syncTheme();
 
 const profileDetails = document.querySelector('.profile-details');
-const profileTabs = [...document.querySelectorAll('.profile-controls [role="tab"]')];
+const profileControls = profileDetails.querySelector('.profile-controls');
+const profileTabs = [...profileControls.querySelectorAll('a')];
 const profilePanels = profileTabs.map((tab) => document.getElementById(tab.getAttribute('aria-controls')));
 let activeProfile = 0;
 
@@ -151,13 +152,19 @@ function selectProfile(index, { focus = false } = {}) {
   if (focus) profileTabs[activeProfile].focus();
   scheduleSectionIndex();
 }
-profilePanels.forEach((panel, i) => { panel.inert = i !== 0; });
-
 profileTabs.forEach((tab, index) => {
-  tab.addEventListener('click', () => selectProfile(index));
+  tab.setAttribute('role', 'tab');
+  profilePanels[index].setAttribute('role', 'tabpanel');
+  tab.addEventListener('click', (event) => {
+    if (event.metaKey || event.ctrlKey || event.shiftKey || event.altKey) return;
+    event.preventDefault();
+    selectProfile(index);
+  });
 });
 
-document.querySelector('.profile-controls')?.addEventListener('keydown', (event) => {
+profileControls.setAttribute('role', 'tablist');
+profileControls.setAttribute('aria-orientation', 'vertical');
+profileControls.addEventListener('keydown', (event) => {
   const keys = ['ArrowUp', 'ArrowDown', 'ArrowLeft', 'ArrowRight', 'Home', 'End'];
   if (!keys.includes(event.key)) return;
   event.preventDefault();
@@ -171,18 +178,30 @@ document.querySelector('.profile-controls')?.addEventListener('keydown', (event)
 
 const sectionIndex = document.querySelector('.section-index');
 const sectionEntries = [...sectionIndex.querySelectorAll('a')].map((link) => {
-  const profileIndex = profileTabs.findIndex((tab) => tab.dataset.profileTarget === link.hash);
+  const profileIndex = profileTabs.findIndex((tab) => tab.hash === link.hash);
   return { link, profileIndex, target: profileIndex < 0 ? document.querySelector(link.hash) : profileDetails };
 });
 let sectionIndexFrame = 0;
+// 탭을 고르는 기능은 HTML 링크로도 작동하고, 이벤트 등록이 끝나면 탭 동작으로 전환합니다.
+selectProfile(Math.max(0, profileTabs.findIndex((tab) => tab.hash === location.hash)));
+profileDetails.dataset.tabsReady = '';
 
 function updateSectionIndex() {
   sectionIndexFrame = 0;
   const readingLine = header.offsetHeight + 56;
   const atBottom = Math.ceil(scrollY + innerHeight) >= root.scrollHeight - 2;
-  const current = atBottom ? sectionEntries.at(-1) : sectionEntries.findLast(({ target, profileIndex }) =>
-    (profileIndex < 0 || profileIndex === activeProfile) && target && target.getBoundingClientRect().top <= readingLine
-  ) ?? sectionEntries[0];
+  let current = sectionEntries[sectionEntries.length - 1];
+  if (!atBottom) {
+    current = sectionEntries[0];
+    for (let index = sectionEntries.length - 1; index >= 0; index--) {
+      const entry = sectionEntries[index];
+      if ((entry.profileIndex < 0 || entry.profileIndex === activeProfile)
+        && entry.target && entry.target.getBoundingClientRect().top <= readingLine) {
+        current = entry;
+        break;
+      }
+    }
+  }
   for (const { link } of sectionEntries) {
     if (link === current.link) link.setAttribute('aria-current', 'location');
     else link.removeAttribute('aria-current');
@@ -275,14 +294,15 @@ const stackDetail = document.querySelector('[data-stack-detail]');
 if (stackDetail) {
   const defaultTip = stackDetail.textContent;
   const showTip = (chip) => {
-    const tip = chip?.dataset.tip;
+    const tip = chip?.getAttribute('aria-description');
     stackDetail.textContent = tip ?? defaultTip;
     stackDetail.classList.toggle('is-active', Boolean(tip));
   };
-  document.querySelectorAll('.stack-items li[data-tip]').forEach((chip) => {
+  document.querySelectorAll('.stack-items li[aria-description]').forEach((chip) => {
     chip.addEventListener('mouseenter', () => showTip(chip));
     chip.addEventListener('focus', () => showTip(chip));
     chip.addEventListener('click', () => showTip(chip));
   });
   document.querySelector('.profile-stack')?.addEventListener('mouseleave', () => showTip(null));
+  stackDetail.closest('#stack').dataset.stackReady = '';
 }

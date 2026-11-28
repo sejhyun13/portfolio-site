@@ -105,16 +105,25 @@ a:focus-visible, button:focus-visible { outline: 2px solid currentColor; outline
 /* 세로 목차형 프로필 블록: 좌측 세로 목차로 우측 패널을 전환하며, 현재 패널 높이에 맞춰 여백을 최소화합니다. */
 .profile-details { display: grid; grid-template-columns: 184px minmax(0, 1fr); align-items: start; gap: clamp(20px, 3vw, 40px); margin-top: clamp(56px, 7vw, 96px); padding-top: clamp(24px, 3vw, 34px); border-top: 1px solid var(--line); scroll-margin-top: calc(var(--header-height) + 20px); }
 .profile-controls { display: grid; gap: 4px; padding-right: clamp(14px, 2vw, 24px); border-right: 1px solid var(--line); }
-.profile-controls button { display: flex; align-items: center; gap: 9px; width: 100%; min-height: 44px; padding: 8px 12px; border: 0; border-radius: 10px; background: transparent; color: var(--muted); font: inherit; font-size: .9375rem; font-weight: 680; text-align: left; cursor: pointer; transition: background-color 140ms, color 140ms; }
-.profile-controls button::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--line); flex: none; transition: background-color 140ms, transform 140ms; }
-.profile-controls button:hover { background: color-mix(in srgb, var(--ink) 5%, transparent); color: var(--ink); }
-.profile-controls button[aria-selected="true"] { background: color-mix(in srgb, var(--ink) 8%, transparent); color: var(--ink); font-weight: 800; }
-.profile-controls button[aria-selected="true"]::before { background: #2450db; transform: scale(1.15); }
-.profile-controls button:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
-/* 모든 스펙 패널을 같은 그리드 셀에 겹쳐 두어 가장 높은 '교육 · 자격' 높이에 자동 고정합니다. */
+.profile-controls a { display: flex; align-items: center; gap: 9px; width: 100%; min-height: 44px; padding: 8px 12px; border: 0; border-radius: 10px; background: transparent; color: var(--muted); font: inherit; font-size: .9375rem; font-weight: 680; text-align: left; cursor: pointer; transition: background-color 140ms, color 140ms; }
+.profile-controls a::before { content: ""; width: 6px; height: 6px; border-radius: 50%; background: var(--line); flex: none; transition: background-color 140ms, transform 140ms; }
+.profile-controls a:hover { background: color-mix(in srgb, var(--ink) 5%, transparent); color: var(--ink); }
+.profile-controls a[aria-selected="true"] { background: color-mix(in srgb, var(--ink) 8%, transparent); color: var(--ink); font-weight: 800; }
+.profile-controls a[aria-selected="true"]::before { background: #2450db; transform: scale(1.15); }
+.profile-controls a:focus-visible { outline: 2px solid var(--ink); outline-offset: 2px; }
+/* 패널을 같은 그리드 셀에 겹쳐 전환할 때 아래 콘텐츠가 움직이지 않게 합니다. */
 .profile-viewport { display: grid; align-items: start; min-width: 0; }
-.profile-viewport > section { grid-area: 1 / 1; min-width: 0; }
+.profile-viewport > section { min-width: 0; scroll-margin-top: 12px; }
+:where([data-tabs-ready]) .profile-viewport > section { grid-area: 1 / 1; }
 .profile-viewport > section[hidden] { display: block; visibility: hidden; pointer-events: none; user-select: none; }
+@media screen {
+  @supports selector(:has(*)) {
+    /* 스크립트를 불러오지 못하면 문서 링크가 선택한 패널을 표시합니다. */
+    .profile-details:not([data-tabs-ready]) .profile-viewport > section { grid-area: 1 / 1; visibility: hidden; }
+    .profile-details:not([data-tabs-ready]) .profile-viewport > section:has(:target),
+    .profile-details:not([data-tabs-ready]) .profile-viewport:not(:has(:target)) > section:first-child { visibility: visible; }
+  }
+}
 .profile-details h2 { font-size: clamp(1.375rem, 2vw, 1.625rem); font-weight: 800; line-height: 1.2; letter-spacing: -.025em; }
 .profile-feature { display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: center; gap: 16px; margin-top: 14px; padding: clamp(14px, 2vw, 20px); border-radius: 14px; }
 .profile-feature-school { color: #143a2b; background: linear-gradient(115deg, #e5eee6, #f2f6ee); }
@@ -154,6 +163,16 @@ a:focus-visible, button:focus-visible { outline: 2px solid currentColor; outline
 .stack-items li > span:not(.skill-dots) { min-width: 0; overflow-wrap: anywhere; }
 .stack-items li:hover, .stack-items li:focus-visible { border-color: var(--stack-accent); transform: translateY(-1px); outline: none; }
 .stack-items li:focus-visible { box-shadow: 0 0 0 2px color-mix(in srgb, var(--stack-accent) 30%, transparent); }
+@media screen {
+  #stack:not([data-stack-ready]) .stack-detail { display: none; }
+  /* 설명 패널 스크립트가 없을 때는 선택한 기술 바로 아래에 근거를 표시합니다. */
+  #stack:not([data-stack-ready]) li[aria-description]:is(:hover, :focus) { flex-wrap: wrap; }
+  #stack:not([data-stack-ready]) li[aria-description]:is(:hover, :focus)::after {
+    content: attr(aria-description);
+    flex: 0 0 100%;
+    font-weight: 550;
+  }
+}
 .tech-icon { width: 18px; height: 18px; flex: none; display: block; }
 /* 숙련도 3단계 점: border 기반으로 그려 인쇄 시 배경 그래픽이 꺼져 있어도 유지됩니다. */
 .skill-dots { display: inline-flex; align-items: center; gap: 3px; margin-left: 3px; flex: none; }
@@ -229,6 +248,21 @@ a:focus-visible, button:focus-visible { outline: 2px solid currentColor; outline
 .dva { --surface: #273a73; --case-mark: #bed6ff; }
 .motif { --surface: #191720; --accent: #ff7ab5; --case-mark: #ff7ab5; }
 .modera { --surface: #fff7df; --case-mark: #9e5100; }
+@media screen {
+  /* 스크롤 스크립트가 없을 때도 각 프로젝트의 테마와 글자 대비를 유지합니다. */
+  :root:not([data-scene]) .project {
+    background-color: var(--surface);
+    background-image: linear-gradient(var(--previous-surface, #fff), var(--surface) 24px);
+  }
+  :root:not([data-scene]) :is(.dva, .motif) {
+    --ink: #fff;
+    --muted: #fff;
+    --line: #ffffff38;
+    color: var(--ink);
+  }
+  :root:not([data-scene]) .motif { --previous-surface: #273a73; }
+  :root:not([data-scene]) .modera { --previous-surface: #191720; }
+}
 .modera .case-figure { background: #fffdf6; box-shadow: inset 0 0 0 1px color-mix(in srgb, #9e5100 16%, transparent); }
 .modera .art-viewport canvas { filter: drop-shadow(10px 20px 22px #8a560024); }
 .project-layout { display: grid; grid-template: "heading art" auto "copy art" 1fr / minmax(0, 1fr) minmax(0, 1.12fr); align-items: start; gap: 22px clamp(18px, 4vw, 58px); width: min(100%, var(--wrap)); }
@@ -336,8 +370,8 @@ a:focus-visible, button:focus-visible { outline: 2px solid currentColor; outline
   .intro { gap: 32px; grid-template-columns: minmax(0, 1.48fr) minmax(0, 1fr); }
   .profile-details { grid-template-columns: 1fr; gap: 18px; }
   .profile-controls { grid-template-columns: repeat(3, minmax(0, 1fr)); padding-right: 0; padding-bottom: 12px; border-right: 0; border-bottom: 1px solid var(--line); }
-  .profile-controls button { justify-content: center; padding: 8px 6px; font-size: .875rem; }
-  .profile-controls button::before { display: none; }
+  .profile-controls a { justify-content: center; padding: 8px 6px; font-size: .875rem; }
+  .profile-controls a::before { display: none; }
   .index-arrow { display: none; }
   .project-list a { grid-template-columns: auto 1fr; }
   .profile-stack { grid-template-columns: repeat(2, minmax(0, 1fr)); }

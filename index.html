@@ -11,9 +11,9 @@
   <link rel="icon"
     href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='7' fill='%23151515'/%3E%3Cpath fill='white' d='M8 8h4v6h8V8h4v16h-4v-6h-8v6H8z'/%3E%3C/svg%3E">
   <link rel="preload" href="./assets/SUIT-Variable.woff2" as="font" type="font/woff2" crossorigin>
-  <link rel="stylesheet" href="./style.css?v=3">
+  <link rel="stylesheet" href="./style.css?v=4">
   <!-- HTML 파일을 직접 열어도 스크롤과 배경 전환을 실행합니다. -->
-  <script defer src="./main.js"></script>
+  <script defer src="./main.js?v=2"></script>
 </head>
 
 <body>
@@ -336,16 +336,13 @@
       </div>
 
       <div class="profile-details">
-        <div class="profile-controls" role="tablist" aria-label="프로필 항목 선택" aria-orientation="vertical">
-          <button type="button" role="tab" id="tab-education" aria-controls="panel-education" aria-selected="true"
-            data-profile-target="#education-title"><span>학력</span></button>
-          <button type="button" role="tab" id="tab-credentials" aria-controls="panel-credentials" aria-selected="false"
-            tabindex="-1" data-profile-target="#credentials-title"><span>교육 · 자격</span></button>
-          <button type="button" role="tab" id="tab-awards" aria-controls="panel-awards" aria-selected="false"
-            tabindex="-1" data-profile-target="#awards-title"><span>수상 내역</span></button>
+        <div class="profile-controls" aria-label="프로필 항목 선택">
+          <a id="tab-education" href="#education-title" aria-controls="panel-education">학력</a>
+          <a id="tab-credentials" href="#credentials-title" aria-controls="panel-credentials">교육 · 자격</a>
+          <a id="tab-awards" href="#awards-title" aria-controls="panel-awards">수상 내역</a>
         </div>
         <div class="profile-viewport">
-          <section id="panel-education" role="tabpanel" aria-labelledby="tab-education">
+          <section id="panel-education" aria-labelledby="tab-education">
             <h2 id="education-title">학력</h2>
             <div class="profile-feature profile-feature-school">
               <div class="profile-emblem"><img src="./assets/skku-emblem.jpg" alt="" width="360" height="360"></div>
@@ -354,7 +351,7 @@
               </div>
             </div>
           </section>
-          <section id="panel-credentials" role="tabpanel" aria-labelledby="tab-credentials" hidden>
+          <section id="panel-credentials" aria-labelledby="tab-credentials">
             <h2 id="credentials-title">교육 · 자격</h2>
             <div class="profile-credentials">
               <div>
@@ -375,7 +372,7 @@
               </div>
             </div>
           </section>
-          <section id="panel-awards" role="tabpanel" aria-labelledby="tab-awards" hidden>
+          <section id="panel-awards" aria-labelledby="tab-awards">
             <h2 id="awards-title">수상 내역</h2>
             <div class="profile-award-layout">
               <svg class="icon profile-trophy" aria-hidden="true">
@@ -409,17 +406,17 @@
               </svg></span>Languages</dt>
           <dd>
             <ul class="stack-items" role="list">
-              <li tabindex="0" data-tip="Python · AI 코어, 비동기 서버, 데이터·GPU 파이프라인 단독 주도"><svg class="tech-icon" width="18"
+              <li tabindex="0" aria-description="Python · AI 코어, 비동기 서버, 데이터·GPU 파이프라인 단독 주도"><svg class="tech-icon" width="18"
                   height="18" aria-hidden="true">
                   <use href="#tech-python" />
                 </svg><span>Python</span><span class="skill-dots" role="img" data-level="3"
                   aria-label="숙련도 3단계: 주도 설계·최적화"><i></i><i></i><i></i></span></li>
-              <li tabindex="0" data-tip="SQL · 642만 건물 SQLite 복합 인덱스·FTS5 튜닝 및 PostgreSQL 운영"><svg class="tech-icon"
+              <li tabindex="0" aria-description="SQL · 642만 건물 SQLite 복합 인덱스·FTS5 튜닝 및 PostgreSQL 운영"><svg class="tech-icon"
                   width="18" height="18" aria-hidden="true">
                   <use href="#tech-sql" />
                 </svg><span>SQL</span><span class="skill-dots" role="img" data-level="2"
                   aria-label="숙련도 2단계: 서비스 구현·연동"><i></i><i></i><i></i></span></li>
-              <li tabindex="0" data-tip="JavaScript · 실시간 관제(/monitor), PoC 브라우저 UI 및 포트폴리오 구현"><svg class="tech-icon"
+              <li tabindex="0" aria-description="JavaScript · 실시간 관제(/monitor), PoC 브라우저 UI 및 포트폴리오 구현"><svg class="tech-icon"
                   width="18" height="18" aria-hidden="true">
                   <use href="#tech-js" />
                 </svg><span>JavaScript</span><span class="skill-dots" role="img" data-level="2"
@@ -433,32 +430,32 @@
               </svg></span>AI &amp; Agent</dt>
           <dd>
             <ul class="stack-items" role="list">
-              <li tabindex="0" data-tip="Tool Calling · Live-1·Backend LLM 위임과 Two-Key 이중 확인 게이트 설계"><svg
+              <li tabindex="0" aria-description="Tool Calling · Live-1·Backend LLM 위임과 Two-Key 이중 확인 게이트 설계"><svg
                   class="tech-icon" width="18" height="18" aria-hidden="true">
                   <use href="#tech-tool" />
                 </svg><span>Tool Calling</span><span class="skill-dots" role="img" data-level="3"
                   aria-label="숙련도 3단계: 주도 설계·최적화"><i></i><i></i><i></i></span></li>
-              <li tabindex="0" data-tip="Structured Outputs · Decision API·Gemini JSON 출력 스키마 설계 및 검증"><svg
+              <li tabindex="0" aria-description="Structured Outputs · Decision API·Gemini JSON 출력 스키마 설계 및 검증"><svg
                   class="tech-icon" width="18" height="18" aria-hidden="true">
                   <use href="#tech-json" />
                 </svg><span>Structured Outputs</span><span class="skill-dots" role="img" data-level="3"
                   aria-label="숙련도 3단계: 주도 설계·최적화"><i></i><i></i><i></i></span></li>
-              <li tabindex="0" data-tip="OpenAI-compatible API · Realtime/Live·Decision·Responses·GMS REST 프로덕션 통합"><svg
+              <li tabindex="0" aria-description="OpenAI-compatible API · Realtime/Live·Decision·Responses·GMS REST 프로덕션 통합"><svg
                   class="tech-icon" width="18" height="18" aria-hidden="true">
                   <use href="#tech-openai" />
                 </svg><span>OpenAI-compatible API</span><span class="skill-dots" role="img" data-level="3"
                   aria-label="숙련도 3단계: 주도 설계·최적화"><i></i><i></i><i></i></span></li>
-              <li tabindex="0" data-tip="MCP · MCP·Skills·Hooks 기반 에이전트 반복 실험 및 검증 하네스 운영"><svg class="tech-icon"
+              <li tabindex="0" aria-description="MCP · MCP·Skills·Hooks 기반 에이전트 반복 실험 및 검증 하네스 운영"><svg class="tech-icon"
                   width="18" height="18" aria-hidden="true">
                   <use href="#tech-mcp" />
                 </svg><span>MCP</span><span class="skill-dots" role="img" data-level="3"
                   aria-label="숙련도 3단계: 주도 설계·최적화"><i></i><i></i><i></i></span></li>
-              <li tabindex="0" data-tip="Hybrid RAG · OpenSearch Nori BM25 + pgvector RRF 결합 및 유사도 임계값 재보정"><svg
+              <li tabindex="0" aria-description="Hybrid RAG · OpenSearch Nori BM25 + pgvector RRF 결합 및 유사도 임계값 재보정"><svg
                   class="tech-icon" width="18" height="18" aria-hidden="true">
                   <use href="#tech-rag" />
                 </svg><span>Hybrid RAG</span><span class="skill-dots" role="img" data-level="2"
                   aria-label="숙련도 2단계: 서비스 구현·연동"><i></i><i></i><i></i></span></li>
-              <li tabindex="0" data-tip="Fine-Tuning (QLoRA) · 도메인 경량 파인튜닝 실험 및 PoC 검증"><svg class="tech-icon"
+              <li tabindex="0" aria-description="Fine-Tuning (QLoRA) · 도메인 경량 파인튜닝 실험 및 PoC 검증"><svg class="tech-icon"
                   width="18" height="18" aria-hidden="true">
                   <use href="#tech-tune" />
                 </svg><span>Fine-Tuning (QLoRA)</span><span class="skill-dots" role="img" data-level="1"
@@ -472,22 +469,22 @@
               </svg></span>Backend</dt>
           <dd>
             <ul class="stack-items" role="list">
-              <li tabindex="0" data-tip="FastAPI · 비동기 AI 코어 전면 리빌드, Outbox, pytest 936개 자동화 운영"><svg class="tech-icon"
+              <li tabindex="0" aria-description="FastAPI · 비동기 AI 코어 전면 리빌드, Outbox, pytest 936개 자동화 운영"><svg class="tech-icon"
                   width="18" height="18" aria-hidden="true">
                   <use href="#tech-fastapi" />
                 </svg><span>FastAPI</span><span class="skill-dots" role="img" data-level="3"
                   aria-label="숙련도 3단계: 주도 설계·최적화"><i></i><i></i><i></i></span></li>
-              <li tabindex="0" data-tip="REST API · BE–AI 계약 설계, 멱등성 키, 세마포어·예산 기반 게이트웨이 구현"><svg class="tech-icon"
+              <li tabindex="0" aria-description="REST API · BE–AI 계약 설계, 멱등성 키, 세마포어·예산 기반 게이트웨이 구현"><svg class="tech-icon"
                   width="18" height="18" aria-hidden="true">
                   <use href="#tech-rest" />
                 </svg><span>REST API</span><span class="skill-dots" role="img" data-level="3"
                   aria-label="숙련도 3단계: 주도 설계·최적화"><i></i><i></i><i></i></span></li>
-              <li tabindex="0" data-tip="WebSocket · Full-Duplex 실시간 음성 세션 및 스트리밍 제어 구현"><svg class="tech-icon"
+              <li tabindex="0" aria-description="WebSocket · Full-Duplex 실시간 음성 세션 및 스트리밍 제어 구현"><svg class="tech-icon"
                   width="18" height="18" aria-hidden="true">
                   <use href="#tech-ws" />
                 </svg><span>WebSocket</span><span class="skill-dots" role="img" data-level="3"
                   aria-label="숙련도 3단계: 주도 설계·최적화"><i></i><i></i><i></i></span></li>
-              <li tabindex="0" data-tip="Django · SSAFY 15기 관통 프로젝트(최우수상) 백엔드 REST API 구현"><svg class="tech-icon"
+              <li tabindex="0" aria-description="Django · SSAFY 15기 관통 프로젝트(최우수상) 백엔드 REST API 구현"><svg class="tech-icon"
                   width="18" height="18" aria-hidden="true">
                   <use href="#tech-django" />
                 </svg><span>Django</span><span class="skill-dots" role="img" data-level="2"
@@ -501,22 +498,22 @@
               </svg></span>Database &amp; Search</dt>
           <dd>
             <ul class="stack-items" role="list">
-              <li tabindex="0" data-tip="SQLite FTS5 · 642만 건물 로컬 주소 DB, 희소 Trigram 최적화, Durable Outbox 구현"><svg
+              <li tabindex="0" aria-description="SQLite FTS5 · 642만 건물 로컬 주소 DB, 희소 Trigram 최적화, Durable Outbox 구현"><svg
                   class="tech-icon" width="18" height="18" aria-hidden="true">
                   <use href="#tech-sqlite" />
                 </svg><span>SQLite FTS5</span><span class="skill-dots" role="img" data-level="3"
                   aria-label="숙련도 3단계: 주도 설계·최적화"><i></i><i></i><i></i></span></li>
-              <li tabindex="0" data-tip="OpenSearch · Custom Nori Docker 이미지 구축 및 매핑 드리프트 자가 교정"><svg class="tech-icon"
+              <li tabindex="0" aria-description="OpenSearch · Custom Nori Docker 이미지 구축 및 매핑 드리프트 자가 교정"><svg class="tech-icon"
                   width="18" height="18" aria-hidden="true">
                   <use href="#tech-opensearch" />
                 </svg><span>OpenSearch</span><span class="skill-dots" role="img" data-level="2"
                   aria-label="숙련도 2단계: 서비스 구현·연동"><i></i><i></i><i></i></span></li>
-              <li tabindex="0" data-tip="PostgreSQL · pgvector(MRL 768d) 스키마 정합화 및 영속 KST 타임존 운영"><svg class="tech-icon"
+              <li tabindex="0" aria-description="PostgreSQL · pgvector(MRL 768d) 스키마 정합화 및 영속 KST 타임존 운영"><svg class="tech-icon"
                   width="18" height="18" aria-hidden="true">
                   <use href="#tech-postgres" />
                 </svg><span>PostgreSQL</span><span class="skill-dots" role="img" data-level="2"
                   aria-label="숙련도 2단계: 서비스 구현·연동"><i></i><i></i><i></i></span></li>
-              <li tabindex="0" data-tip="Qdrant · GPU 오프라인 시 로컬 단독 부팅 분리 핫픽스 및 타 파트 RAG 연동"><svg class="tech-icon"
+              <li tabindex="0" aria-description="Qdrant · GPU 오프라인 시 로컬 단독 부팅 분리 핫픽스 및 타 파트 RAG 연동"><svg class="tech-icon"
                   width="18" height="18" aria-hidden="true">
                   <use href="#tech-qdrant" />
                 </svg><span>Qdrant</span><span class="skill-dots" role="img" data-level="1"
@@ -530,32 +527,32 @@
               </svg></span>Cloud &amp; DevOps</dt>
           <dd>
             <ul class="stack-items" role="list">
-              <li tabindex="0" data-tip="Docker · 111MB 경량 이미지, 읽기전용 DB 볼륨, 9개 컨테이너 KST 통일"><svg class="tech-icon"
+              <li tabindex="0" aria-description="Docker · 111MB 경량 이미지, 읽기전용 DB 볼륨, 9개 컨테이너 KST 통일"><svg class="tech-icon"
                   width="18" height="18" aria-hidden="true">
                   <use href="#tech-docker" />
                 </svg><span>Docker</span><span class="skill-dots" role="img" data-level="3"
                   aria-label="숙련도 3단계: 주도 설계·최적화"><i></i><i></i><i></i></span></li>
-              <li tabindex="0" data-tip="Nginx · SigV4 프록시 3계층 장애 복구, 웹훅 미러링, SSL 리버스 프록시 운영"><svg class="tech-icon"
+              <li tabindex="0" aria-description="Nginx · SigV4 프록시 3계층 장애 복구, 웹훅 미러링, SSL 리버스 프록시 운영"><svg class="tech-icon"
                   width="18" height="18" aria-hidden="true">
                   <use href="#tech-nginx" />
                 </svg><span>Nginx</span><span class="skill-dots" role="img" data-level="3"
                   aria-label="숙련도 3단계: 주도 설계·최적화"><i></i><i></i><i></i></span></li>
-              <li tabindex="0" data-tip="Jenkins · flock 배포 잠금, 원자적 .env 교체, 직전 릴리스 자동 롤백 파이프라인"><svg class="tech-icon"
+              <li tabindex="0" aria-description="Jenkins · flock 배포 잠금, 원자적 .env 교체, 직전 릴리스 자동 롤백 파이프라인"><svg class="tech-icon"
                   width="18" height="18" aria-hidden="true">
                   <use href="#tech-jenkins" />
                 </svg><span>Jenkins</span><span class="skill-dots" role="img" data-level="2"
                   aria-label="숙련도 2단계: 서비스 구현·연동"><i></i><i></i><i></i></span></li>
-              <li tabindex="0" data-tip="GCP · Cloud Run Job 온디맨드 GPU 서빙 연동 및 가중치 순차 로딩 최적화"><svg class="tech-icon"
+              <li tabindex="0" aria-description="GCP · Cloud Run Job 온디맨드 GPU 서빙 연동 및 가중치 순차 로딩 최적화"><svg class="tech-icon"
                   width="18" height="18" aria-hidden="true">
                   <use href="#tech-gcp" />
                 </svg><span>GCP</span><span class="skill-dots" role="img" data-level="2"
                   aria-label="숙련도 2단계: 서비스 구현·연동"><i></i><i></i><i></i></span></li>
-              <li tabindex="0" data-tip="AWS · Lightsail·EC2 배포 및 S3 precomputed/ 사전계산 파이프라인 연동"><svg class="tech-icon"
+              <li tabindex="0" aria-description="AWS · Lightsail·EC2 배포 및 S3 precomputed/ 사전계산 파이프라인 연동"><svg class="tech-icon"
                   width="18" height="18" aria-hidden="true">
                   <use href="#tech-aws" />
                 </svg><span>AWS</span><span class="skill-dots" role="img" data-level="2"
                   aria-label="숙련도 2단계: 서비스 구현·연동"><i></i><i></i><i></i></span></li>
-              <li tabindex="0" data-tip="Linux · 운영 서버 프로파일링, 타임존 정합화 및 무중단 배포 스크립트 운영"><svg class="tech-icon"
+              <li tabindex="0" aria-description="Linux · 운영 서버 프로파일링, 타임존 정합화 및 무중단 배포 스크립트 운영"><svg class="tech-icon"
                   width="18" height="18" aria-hidden="true">
                   <use href="#tech-linux" />
                 </svg><span>Linux</span><span class="skill-dots" role="img" data-level="2"
@@ -569,42 +566,42 @@
               </svg></span>Tools</dt>
           <dd>
             <ul class="stack-items" role="list">
-              <li tabindex="0" data-tip="VS Code · Python·FastAPI 개발, 원격 SSH·디버깅 및 확장 환경 운영"><svg class="tech-icon"
+              <li tabindex="0" aria-description="VS Code · Python·FastAPI 개발, 원격 SSH·디버깅 및 확장 환경 운영"><svg class="tech-icon"
                   width="18" height="18" aria-hidden="true">
                   <use href="#tech-vscode" />
                 </svg><span>VS Code</span><span class="skill-dots" role="img" data-level="3"
                   aria-label="숙련도 3단계: 주도 설계·최적화"><i></i><i></i><i></i></span></li>
-              <li tabindex="0" data-tip="Git · 브랜치 전략 및 AI 코어 리빌드 이력 관리"><svg class="tech-icon" width="18" height="18"
+              <li tabindex="0" aria-description="Git · 브랜치 전략 및 AI 코어 리빌드 이력 관리"><svg class="tech-icon" width="18" height="18"
                   aria-hidden="true">
                   <use href="#tech-git" />
                 </svg><span>Git</span><span class="skill-dots" role="img" data-level="3"
                   aria-label="숙련도 3단계: 주도 설계·최적화"><i></i><i></i><i></i></span></li>
-              <li tabindex="0" data-tip="GitHub · 저장소 형상 관리, PR 코드 리뷰 및 Pages 자동 배포 운영"><svg class="tech-icon"
+              <li tabindex="0" aria-description="GitHub · 저장소 형상 관리, PR 코드 리뷰 및 Pages 자동 배포 운영"><svg class="tech-icon"
                   width="18" height="18" aria-hidden="true">
                   <use href="#tech-github" />
                 </svg><span>GitHub</span><span class="skill-dots" role="img" data-level="3"
                   aria-label="숙련도 3단계: 주도 설계·최적화"><i></i><i></i><i></i></span></li>
-              <li tabindex="0" data-tip="Orca · git worktree 기반 다중 브랜치·병렬 에이전트 세션 운영"><svg class="tech-icon"
+              <li tabindex="0" aria-description="Orca · git worktree 기반 다중 브랜치·병렬 에이전트 세션 운영"><svg class="tech-icon"
                   width="18" height="18" aria-hidden="true">
                   <use href="#tech-orca" />
                 </svg><span>Orca</span><span class="skill-dots" role="img" data-level="3"
                   aria-label="숙련도 3단계: 주도 설계·최적화"><i></i><i></i><i></i></span></li>
-              <li tabindex="0" data-tip="GitLab · MR 코드 리뷰, Jenkins 웹훅 자동 배포 연동 및 협업 관리"><svg class="tech-icon"
+              <li tabindex="0" aria-description="GitLab · MR 코드 리뷰, Jenkins 웹훅 자동 배포 연동 및 협업 관리"><svg class="tech-icon"
                   width="18" height="18" aria-hidden="true">
                   <use href="#tech-gitlab" />
                 </svg><span>GitLab</span><span class="skill-dots" role="img" data-level="2"
                   aria-label="숙련도 2단계: 서비스 구현·연동"><i></i><i></i><i></i></span></li>
-              <li tabindex="0" data-tip="SourceTree · 브랜치 그래프 시각화, 충돌 병합 및 커밋 히스토리 관리"><svg class="tech-icon"
+              <li tabindex="0" aria-description="SourceTree · 브랜치 그래프 시각화, 충돌 병합 및 커밋 히스토리 관리"><svg class="tech-icon"
                   width="18" height="18" aria-hidden="true">
                   <use href="#tech-sourcetree" />
                 </svg><span>SourceTree</span><span class="skill-dots" role="img" data-level="2"
                   aria-label="숙련도 2단계: 서비스 구현·연동"><i></i><i></i><i></i></span></li>
-              <li tabindex="0" data-tip="Postman · FastAPI·Spring REST API 엔드포인트 검증 및 요청 컬렉션 관리"><svg class="tech-icon"
+              <li tabindex="0" aria-description="Postman · FastAPI·Spring REST API 엔드포인트 검증 및 요청 컬렉션 관리"><svg class="tech-icon"
                   width="18" height="18" aria-hidden="true">
                   <use href="#tech-postman" />
                 </svg><span>Postman</span><span class="skill-dots" role="img" data-level="2"
                   aria-label="숙련도 2단계: 서비스 구현·연동"><i></i><i></i><i></i></span></li>
-              <li tabindex="0" data-tip="Jira · 주간 Sprint 일정·이슈 관리 및 팀 KPT 회고 운영"><svg class="tech-icon" width="18"
+              <li tabindex="0" aria-description="Jira · 주간 Sprint 일정·이슈 관리 및 팀 KPT 회고 운영"><svg class="tech-icon" width="18"
                   height="18" aria-hidden="true">
                   <use href="#tech-jira" />
                 </svg><span>Jira</span><span class="skill-dots" role="img" data-level="2"
